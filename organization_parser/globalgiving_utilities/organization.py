@@ -2,10 +2,9 @@
 
 from typing import Optional, Text, List, Dict
 
-__version__ = '0.0.2'
-__all__ = [
-    'Organization'
-]
+__version__ = "0.0.2"
+__all__ = ["Organization"]
+
 
 class Organization(object):
 
@@ -89,23 +88,23 @@ class Organization(object):
 
     def __init__(self):
         """Initializes a new Organization."""
-        self.id = None # type: Optional[Text]
-        self._registration_country = None # type: Optional[Text]
-        self._registration_id = None # type: Optional[Text]
-        self._registrations = [] # type: List[Dict[Text, Text]]
-        self._alternatives = {} # type: Dict[Text, Dict[Text, Dict[Text, Text]]]
+        self.id = None  # type: Optional[Text]
+        self._registration_country = None  # type: Optional[Text]
+        self._registration_id = None  # type: Optional[Text]
+        self._registrations = []  # type: List[Dict[Text, Text]]
+        self._alternatives = {}  # type: Dict[Text, Dict[Text, Dict[Text, Text]]]
         self.ids = {}
-        self.name = None # type: Optional[Text]
-        self.source = None # type: Optional[Text]
-        self.website = None # type: Optional[Text]
+        self.name = None  # type: Optional[Text]
+        self.source = None  # type: Optional[Text]
+        self.website = None  # type: Optional[Text]
         self.mailing_address = {}
-        self.phone = None # type: Optional[Text]
-        self.year_founded = None # type: Optional[int]
-        self.inactive = False # type: Optional[bool]
-        self.language = "en" # type: Text
+        self.phone = None  # type: Optional[Text]
+        self.year_founded = None  # type: Optional[int]
+        self.inactive = False  # type: Optional[bool]
+        self.language = "en"  # type: Text
         self.external_field = {}
-    
-    def is_valid(self) -> bool: 
+
+    def is_valid(self) -> bool:
         """Checks if this organization is valid for importing.
 
         A valid organization is one that has an id, a name, a source, and a
@@ -115,11 +114,12 @@ class Organization(object):
             True if this organization is valid, otherwise False.
         
         """
-        if (self.id is None or
-            self.name is None or
-            self.source is None or
-            self._registration_country is None or
-            self._registration_id is None
+        if (
+            self.id is None
+            or self.name is None
+            or self.source is None
+            or self._registration_country is None
+            or self._registration_id is None
         ):
             return False
         return True
@@ -149,13 +149,12 @@ class Organization(object):
         if self._registration_country is None:
             self._registration_country = registration_country
             self._registration_id = registration_id
-        registration = {
-            "country": registration_country,
-            "id": registration_id
-        }
+        registration = {"country": registration_country, "id": registration_id}
         self._registrations.append(registration)
 
-    def add_alternative(self, field: Text, value: Text, source: Text, language: Text = "en"):
+    def add_alternative(
+        self, field: Text, value: Text, source: Text, language: Text = "en"
+    ):
         """Add an alternative value for a field.
 
         Args:
@@ -172,10 +171,7 @@ class Organization(object):
         _language = language if language else "en"
         if field not in self._alternatives:
             self._alternatives[field] = {}
-        self._alternatives[field][source] = {
-            "language": _language,
-            "value": value
-        }
+        self._alternatives[field][source] = {"language": _language, "value": value}
 
     def to_dict(self) -> Dict:
         """Creates a dict of this Organization that is suitable for being
@@ -196,7 +192,7 @@ class Organization(object):
             "phone": self.phone,
             "year_founded": int(self.year_founded) if self.year_founded else None,
             "language": self.language,
-            "inactive": self.inactive or None
+            "inactive": self.inactive or None,
         }
         for key, value in self.external_field.items():
             return_data[key] = value
@@ -211,7 +207,7 @@ class Organization(object):
         if self._registration_country:
             output += "\n  Registration Country: {}".format(self._registration_country)
         if self._registration_id:
-            output += "\n  Registration ID: {}". format(self._registration_id)
+            output += "\n  Registration ID: {}".format(self._registration_id)
         return output
 
     def upload(self):
